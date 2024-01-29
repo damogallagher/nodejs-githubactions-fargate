@@ -36,7 +36,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform
-        run: terraform init -chdir="./terraform" --backend-config=terraform/environmentConfigs/ergo/backend-provider-config.conf -reconfigure -upgrade
+        run: terraform -chdir="./terraform" init --backend-config=terraform/environmentConfigs/backend-provider-config.conf -reconfigure -upgrade
 
       - name: Validate Terraform configuration
         run: terraform validate
