@@ -52,7 +52,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Extract ECR Repository ARN   
-        run: echo "ECR_REPOSITORY_ARN=$(terraform output ecr_repository_arn)" >> $GITHUB_ENV
+        run: echo "ECR_REPOSITORY_ARN=$(terraform -chdir="./terraform" output ecr_repository_arn)" >> $GITHUB_ENV
 
       - name: Display ECR Repository ARN
         run: echo "ECR Repository ARN - $ECR_REPOSITORY_ARN"
