@@ -45,7 +45,7 @@ jobs:
         run: terraform -chdir="./terraform"  plan
 
       - name: Apply Terraform changes
-        run: terraform -chdir="./terraform" apply -var-file="terraform/environmentConfig/environment.tfvars" -auto-approve      
+        run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars" -auto-approve      
 
       - name: Login to Amazon ECR
         id: login-ecr
