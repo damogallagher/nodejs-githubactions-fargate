@@ -1,6 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
 
 resource "aws_ecr_repository" "ecr_repository" {
   name = "${var.company_name}-repository"  # Replace with your desired repository name
