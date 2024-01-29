@@ -1,8 +1,8 @@
 {
-    "family": "",
+    "family": "nodejs-githubactions-awsfargate-fargate-task",
     "taskRoleArn": "",
     "executionRoleArn": "",
-    "networkMode": "bridge",
+    "networkMode": "awsvpc",
     "containerDefinitions": [
         {
             "name": "fargate-container",
@@ -18,12 +18,9 @@
             ],
             "portMappings": [
                 {
-                    "containerPort": 0,
-                    "hostPort": 0,
-                    "protocol": "tcp",
-                    "name": "",
-                    "appProtocol": "http",
-                    "containerPortRange": ""
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp"
                 }
             ],
             "essential": true,
@@ -94,12 +91,6 @@
                 {
                     "name": "",
                     "valueFrom": ""
-                }
-            ],
-            "dependsOn": [
-                {
-                    "containerName": "",
-                    "condition": "START"
                 }
             ],
             "startTimeout": 0,
