@@ -28,6 +28,10 @@ jobs:
       - name: Set up Terraform CLI
         uses: hashicorp/setup-terraform@v3
 
+      - name: Destroy Terraform changes
+        run: terraform -chdir="./terraform" destroy -var-file="environmentConfig/environment.tfvars" -auto-approve      
+
+
       - name: Initialize Terraform
         run: terraform -chdir="./terraform" init --backend-config=environmentConfig/backend-provider-config.conf -reconfigure -upgrade
 
