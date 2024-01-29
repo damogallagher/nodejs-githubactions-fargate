@@ -9,6 +9,7 @@ name = "${var.company_name}-cluster"
 
 resource "aws_ecs_task_definition" "fargate_task" {
   family                   = "${var.company_name}-fargate-task"
+  networkMode              = "awsvpc"
   container_definitions = file("task-definition.json")
 }
 
