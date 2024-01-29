@@ -39,13 +39,13 @@ jobs:
         run: terraform -chdir="./terraform" init --backend-config=environmentConfig/backend-provider-config.conf -reconfigure -upgrade
 
       - name: Validate Terraform configuration
-        run: terraform validate
+        run: terraform -chdir="./terraform" validate
 
       - name: Plan Terraform changes
-        run: terraform plan
+        run: terraform -chdir="./terraform"  plan
 
       - name: Apply Terraform changes
-        run: terraform apply -var-file="terraform/environmentConfigs/environment.tfvars" -auto-approve      
+        run: terraform -chdir="./terraform" apply -var-file="terraform/environmentConfig/environment.tfvars" -auto-approve      
 
       - name: Login to Amazon ECR
         id: login-ecr
