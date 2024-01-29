@@ -2,9 +2,6 @@
         {
             "name": "fargate-container",
             "image": "",
-            "repositoryCredentials": {
-                "credentialsParameter": ""
-            },
             "cpu": 0,
             "memory": 0,
             "memoryReservation": 0,
