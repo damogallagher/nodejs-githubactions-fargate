@@ -65,10 +65,10 @@ jobs:
              echo "ECS Cluster Name - $ECS_CLUSTER_NAME"
              echo "ECS Service Name - $ECS_SERVICE_NAME"                         
              echo "ECS Task Definition Name - $ECS_TASK_DEFINITION_NAME" 
-               
+
       - name: Download task definition
         run: |
-             aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query taskDefinition > $ECS_TASK_DEFINITION_FILE
+             aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query taskDefinition > ${{ env.ECS_TASK_DEFINITION_FILE }}
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -87,7 +87,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-            task-definition: ${{ env.ECS_TASK_DEFINITION }}
+            task-definition: ${{ env.ECS_TASK_DEFINITION_FILE }}
             container-name: ${{ env.CONTAINER_NAME }}
             image: ${{ steps.build-image.outputs.image }}
   
