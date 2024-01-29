@@ -76,13 +76,13 @@ jobs:
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Update ECS Task Definition
-      run: |
-        # Fetch the existing task definition ARN
-        CURRENT_TASK_ARN=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query "taskDefinition.taskDefinitionArn" --output text)
-        echo "CURRENT_TASK_ARN - $CURRENT_TASK_ARN"
+        run: |
+          # Fetch the existing task definition ARN
+          CURRENT_TASK_ARN=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query "taskDefinition.taskDefinitionArn" --output text)
+          echo "CURRENT_TASK_ARN - $CURRENT_TASK_ARN"
 
-        # Create a new revision of the existing task definition
-        NEW_REVISION=$(aws ecs register-task-definition --cli-input-json file://path/to/your/new-task-definition.json --query "taskDefinition.taskDefinitionArn" --output text)
+          # Create a new revision of the existing task definition
+          NEW_REVISION=$(aws ecs register-task-definition --cli-input-json file://path/to/your/new-task-definition.json --query "taskDefinition.taskDefinitionArn" --output text)
 
-        # Print the new task definition revision
-        echo "New Task Definition Revision: $NEW_REVISION"
+          # Print the new task definition revision
+          echo "New Task Definition Revision: $NEW_REVISION"
