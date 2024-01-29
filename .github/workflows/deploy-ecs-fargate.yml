@@ -54,7 +54,6 @@ jobs:
              echo "ECR_REPOSITORY_NAME=$(terraform -chdir="./terraform" output -raw ecr_repository_name)" >> $GITHUB_ENV
              echo "ECS_CLUSTER_ARN=$(terraform -chdir="./terraform" output -raw ecs_cluster_arn)" >> $GITHUB_ENV
              echo "ECS_CLUSTER_NAME=$(terraform -chdir="./terraform" output -raw ecs_cluster_name)" >> $GITHUB_ENV
-             echo "ECS_SERVICE_ARN=$(terraform -chdir="./terraform" output -raw ecs_service_arn)" >> $GITHUB_ENV
              echo "ECS_SERVICE_NAME=$(terraform -chdir="./terraform" output -raw ecs_service_name)" >> $GITHUB_ENV             
              echo "ECS_TASK_DEFINITION_ARN=$(terraform -chdir="./terraform" output -raw ecs_task_definition_arn)" >> $GITHUB_ENV
              echo "ECS_TASK_DEFINITION_NAME=$(terraform -chdir="./terraform" output -raw ecs_task_definition_name)" >> $GITHUB_ENV
@@ -65,7 +64,6 @@ jobs:
              echo "ECR Repository Name - $ECR_REPOSITORY_NAME"
              echo "ECS Cluster ARN - $ECS_CLUSTER_ARN"
              echo "ECS Cluster Name - $ECS_CLUSTER_NAME"
-             echo "ECS Service ARN - $ECS_SERVICE_ARN"
              echo "ECS Service Name - $ECS_SERVICE_NAME"             
              echo "ECS Task Definition ARN - $ECS_TASK_DEFINITION_ARN"
              echo "ECS Task Definition Name - $ECS_TASK_DEFINITION_NAME"             

@@ -61,10 +61,6 @@ output "ecs_cluster_name" {
   value = "${var.company_name}-cluster"
 }
 
-output "ecs_service_arn" {
-  value = aws_ecs_service.fargate_service.arn
-}
-
 output "ecs_service_name" {
   value = "${var.company_name}-fargate-service"
 }
