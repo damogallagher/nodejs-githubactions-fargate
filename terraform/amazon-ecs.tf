@@ -20,8 +20,8 @@ resource "aws_ecs_task_definition" "fargate_task" {
     name  = "${var.company_name}-container"
     image = "nginx:latest"
     portMappings = [{
-      containerPort = 80
-      hostPort      = 80
+      containerPort = 3000
+      hostPort      = 3000
     }]
   }])
 }
@@ -42,7 +42,7 @@ resource "aws_iam_role" "ecs_execution_role" {
 }
 
 resource "aws_ecs_service" "fargate_service" {
-  name            = "my-fargate-service"
+  name            = "${var.company_name}-fargate-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.fargate_task.arn
   launch_type     = "FARGATE"
@@ -60,6 +60,15 @@ output "ecs_cluster_arn" {
 output "ecs_cluster_name" {
   value = "${var.company_name}-cluster"
 }
+
+output "ecs_service_arn" {
+  value = aws_ecs_service.ecs_cluster.arn
+}
+
+output "ecs_service_name" {
+  value = "${var.company_name}-fargate-service"
+}
+
 output "ecs_task_definition_arn" {
     value = aws_ecs_task_definition.fargate_task.arn
 }
