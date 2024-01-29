@@ -84,7 +84,9 @@ jobs:
            # Fetch the task definition json and update
           echo "$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME)  " >> new-task-definition.json 
           more new-task-definition.json
-          sed -E 's/"image": "[^"]*"/"image": "$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG"/' new-task-definition.json
+          OLD_KEY="=image"
+          NEW_VALUE="$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG"
+          sed -i "s/\"${OLD_KEY}\": \"[^\"]*\"/\"${OLD_KEY}\": \"${NEW_VALUE}\"/" new-task-definition.json
           more new-task-definition.json
 
 
