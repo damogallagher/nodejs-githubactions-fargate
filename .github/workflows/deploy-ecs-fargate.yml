@@ -57,6 +57,8 @@ jobs:
              echo "ECR_REPOSITORY_NAME=$(terraform -chdir="./terraform" output -raw ecr_repository_name)" >> $GITHUB_ENV
              echo "ECS_CLUSTER_ARN=$(terraform -chdir="./terraform" output -raw ecs_cluster_arn)" >> $GITHUB_ENV
              echo "ECS_CLUSTER_NAME=$(terraform -chdir="./terraform" output -raw ecs_cluster_name)" >> $GITHUB_ENV
+             echo "ECS_TASK_DEFINITION_ARN=$(terraform -chdir="./terraform" output -raw ecs_task_definition_arn)" >> $GITHUB_ENV
+             echo "ECS_TASK_DEFINITION_NAME=$(terraform -chdir="./terraform" output -raw ecs_task_definition_name)" >> $GITHUB_ENV
 
 
 
@@ -66,6 +68,8 @@ jobs:
              echo "ECR Repository Name - $ECR_REPOSITORY_NAME"
              echo "ECS Cluster ARN - $ECS_CLUSTER_ARN"
              echo "ECS Cluster Name - $ECS_CLUSTER_NAME"
+             echo "ECS Task Definition ARN - $ECS_TASK_DEFINITION_ARN"
+             echo "ECS Task Definition Name - $ECS_TASK_DEFINITION_NAME"             
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -80,18 +84,14 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+      - name: Update ECS Task Definition
+      run: |
+        # Fetch the existing task definition ARN
+        CURRENT_TASK_ARN=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query "taskDefinition.taskDefinitionArn" --output text)
+        echo "CURRENT_TASK_ARN - $CURRENT_TASK_ARN"
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+        # Create a new revision of the existing task definition
+        NEW_REVISION=$(aws ecs register-task-definition --cli-input-json file://path/to/your/new-task-definition.json --query "taskDefinition.taskDefinitionArn" --output text)
+
+        # Print the new task definition revision
+        echo "New Task Definition Revision: $NEW_REVISION"
