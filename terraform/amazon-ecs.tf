@@ -43,7 +43,7 @@ resource "aws_iam_role" "ecs_execution_role" {
 
 resource "aws_ecs_service" "fargate_service" {
   name            = "my-fargate-service"
-  cluster         = aws_ecs_cluster.fargate_cluster.id
+  cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.fargate_task.arn
   launch_type     = "FARGATE"
   desired_count   = 2
