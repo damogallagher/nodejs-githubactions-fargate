@@ -82,8 +82,9 @@ jobs:
           echo "CURRENT_TASK_ARN - $CURRENT_TASK_ARN"
 
            # Fetch the task definition json and update
-          echo "$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME  " >> new-task-definition.json 
-          sed -E 's/"image": "[^"]*"/"image": "$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG"/' new-task-definition.json
+          echo "$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME)  " >> new-task-definition.json 
+          more new-task-definition.json
+          sed -E 's/"image": "[^"]*"/"image": "ECR_REGISTRY/ECR_REPOSITORY_NAME:IMAGE_TAG"/' new-task-definition.json
           more new-task-definition.json
 
 
