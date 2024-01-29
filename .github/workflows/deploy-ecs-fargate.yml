@@ -42,7 +42,7 @@ jobs:
         run: terraform -chdir="./terraform" validate
 
       - name: Plan Terraform changes
-        run: terraform -chdir="./terraform"  plan
+        run: terraform -chdir="./terraform"  plan -var-file="environmentConfig/environment.tfvars"
 
       - name: Apply Terraform changes
         run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars" -auto-approve      
