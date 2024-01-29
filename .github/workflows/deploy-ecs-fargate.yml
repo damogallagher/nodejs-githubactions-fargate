@@ -87,6 +87,8 @@ jobs:
           
           OLD_IMAGE=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query "taskDefinition.containerDefinitions[0].image" --output text )
           NEW_IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG"
+          echo "OLD_IMAGE: $OLD_IMAGE"
+          echo "NEW_IMAGE: $NEW_IMAGE"
           sed -i 's/${OLD_IMAGE}/${NEW_IMAGE}/' new-task-definition.json 
           more new-task-definition.json
 
