@@ -53,8 +53,8 @@ jobs:
 
       - name: Extract Terraform Variables
         run: | 
-             echo "ECR_REPOSITORY_ARN=$(terraform -chdir="./terraform" output ecr_repository_arn)" >> $GITHUB_ENV
-             echo "ECR_REPOSITORY_NAME=$(terraform -chdir="./terraform" output ecr_repository_name)" >> $GITHUB_ENV
+             echo "ECR_REPOSITORY_ARN=$(terraform -chdir="./terraform" output -raw ecr_repository_arn)" >> $GITHUB_ENV
+             echo "ECR_REPOSITORY_NAME=$(terraform -chdir="./terraform" output -raw ecr_repository_name)" >> $GITHUB_ENV
 
       - name: Display Terraform Variables
         run: | 
