@@ -10,3 +10,8 @@ resource "aws_ecr_repository" "ecr_repository" {
 output "ecr_repository_arn" {
   value = aws_ecr_repository.ecr_repository.arn
 }
+
+output "ecr_repository_name" {
+  value = "${var.company_name}-repository"
+}
+
