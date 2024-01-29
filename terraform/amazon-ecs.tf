@@ -66,5 +66,5 @@ output "ecs_service_name" {
 }
 
 output "ecs_task_definition_name" {
-    value = "${var.company_name}-fargate-task-definition"
+    value = "${var.company_name}-fargate-task"
 }
