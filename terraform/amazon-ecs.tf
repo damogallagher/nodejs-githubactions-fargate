@@ -62,7 +62,7 @@ output "ecs_cluster_name" {
 }
 
 output "ecs_service_arn" {
-  value = aws_ecs_service.ecs_cluster.arn
+  value = aws_ecs_service.fargate_service.arn
 }
 
 output "ecs_service_name" {
