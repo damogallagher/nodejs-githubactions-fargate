@@ -55,7 +55,7 @@ jobs:
         run: echo "::set-output name=ecr_repository_arn::$(terraform output -raw ecr_repository_arn)"        
 
       - name: Display ECR Repository ARN
-        run: echo "ECR Repository ARN: ${{ needs.terraform.outputs.extract_ecr_arn.outputs.ecr_repository_arn }}"
+        run: echo "ECR Repository ARN - ${{ needs.terraform.outputs.extract_ecr_arn.outputs.ecr_repository_arn }}"
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
