@@ -1,7 +1,7 @@
 [
         {
             "name": "fargate-container",
-            "image": "",
+            "image": "nginx:latest",
             "cpu": 0,
             "memory": 0,
             "memoryReservation": 0,
