@@ -81,8 +81,14 @@ jobs:
           CURRENT_TASK_ARN=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query "taskDefinition.taskDefinitionArn" --output text)
           echo "CURRENT_TASK_ARN - $CURRENT_TASK_ARN"
 
+           # Fetch the task definition json and update
+          echo "$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME  " >> new-task-definition.json 
+          sed -E 's/"image": "[^"]*"/"image": "$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG"/' new-task-definition.json
+          more new-task-definition.json
+
+
           # Create a new revision of the existing task definition
-          NEW_REVISION=$(aws ecs register-task-definition --cli-input-json file://path/to/your/new-task-definition.json --query "taskDefinition.taskDefinitionArn" --output text)
+          NEW_REVISION=$(aws ecs register-task-definition --cli-input-json file://new-task-definition.json --query "taskDefinition.taskDefinitionArn" --output text)
 
           # Print the new task definition revision
           echo "New Task Definition Revision: $NEW_REVISION"

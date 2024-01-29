@@ -53,7 +53,6 @@ resource "aws_ecs_service" "fargate_service" {
   }
 }
 
-
 output "ecs_cluster_arn" {
   value = aws_ecs_cluster.ecs_cluster.arn
 }
