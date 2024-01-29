@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-githubactions-fargate",
+  "version": "1.0.0",
+  "description": "Demo of deploying a nodejs application to AWS Fargate using GitHub Actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damogallagher/nodejs-githubactions-fargate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/damogallagher/nodejs-githubactions-fargate/issues"
+  },
+  "homepage": "https://github.com/damogallagher/nodejs-githubactions-fargate#readme"
+}
