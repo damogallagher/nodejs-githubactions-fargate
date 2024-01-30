@@ -20,17 +20,8 @@ locals {
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
 }
-/* Elastic IP for NAT */
-resource "aws_eip" "nat_eip" {
-  domain     = "vpc"
-  depends_on = [aws_internet_gateway.ig]
-}
-/* NAT */
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
-  depends_on    = [aws_internet_gateway.ig]
-}
+
+
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
@@ -66,11 +57,7 @@ resource "aws_route" "public_internet_gateway" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.ig.id
 }
-resource "aws_route" "private_nat_gateway" {
-  route_table_id         = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat.id
-}
+
 /* Route table associations */
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnets_cidr)
@@ -101,4 +88,22 @@ resource "aws_security_group" "default" {
     protocol  = "-1"
     self      = "true"
   }
+}
+
+/*==== VPC Gateway Endpoint - S3 ====*/
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.${var.aws_region}.s3"
+}
+
+/*==== VPC Interface Endpoint - ECR DKR ====*/
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws..${var.aws_region}.ecr.dkr"
+}
+
+/*==== VPC Interface Endpoint - ECR API ====*/
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws..${var.aws_region}.ecr.api"
 }
