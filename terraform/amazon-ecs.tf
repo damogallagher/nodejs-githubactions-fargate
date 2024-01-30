@@ -34,13 +34,13 @@ resource "aws_ecs_task_definition" "fargate_task" {
       hostPort      = 3000
     }]
 
-    health_check = {
-      command      = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
-      interval     = 30 # Health check interval in seconds
-      timeout      = 5  # Timeout period in seconds
-      retries      = 3  # Number of retries before considering the container unhealthy
-      start_period = 60 # Time period in seconds to ignore the health check results after task startup
-    }
+    #health_check = {
+    #  command      = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+    #  interval     = 30 # Health check interval in seconds
+    #  timeout      = 5  # Timeout period in seconds
+    #  retries      = 3  # Number of retries before considering the container unhealthy
+    #  start_period = 60 # Time period in seconds to ignore the health check results after task startup
+    #}
 
 
   }])

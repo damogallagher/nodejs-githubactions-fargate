@@ -103,6 +103,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
+  subnet_ids         = aws_subnet.private_subnet[*].id
 }
 
 /*==== VPC Interface Endpoint - ECR API ====*/
@@ -112,6 +113,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
+  subnet_ids         = aws_subnet.private_subnet[*].id
 }
 
 /*==== VPC's Default Security Group ======*/
