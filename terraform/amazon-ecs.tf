@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-name = "${var.company_name}-cluster"
+name = "${var.company}-cluster"
 
   setting {
     name  = "containerInsights"
@@ -8,7 +8,7 @@ name = "${var.company_name}-cluster"
 }
 
 resource "aws_ecs_task_definition" "fargate_task" {
-  family                   = "${var.company_name}-fargate-task"
+  family                   = "${var.company}-fargate-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 1024  # CPU units (1 vCPU = 256 CPU units)
@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
   execution_role_arn = aws_iam_role.ecs_execution_role.arn
 
   container_definitions = jsonencode([{
-    name  = "${var.company_name}-container"
+    name  = "${var.company}-container"
     image = "nginx:latest"
     portMappings = [{
       containerPort = 3000
@@ -42,13 +42,13 @@ resource "aws_iam_role" "ecs_execution_role" {
 }
 
 resource "aws_ecs_service" "fargate_service" {
-  name            = "${var.company_name}-fargate-service"
+  name            = "${var.company}-fargate-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.fargate_task.arn
   launch_type     = "FARGATE"
   desired_count   = 2
   network_configuration {
-    subnets = aws_subnet.fargate_subnet[*].id
+    subnets = aws_subnet.private_subnet[*].id
     security_groups = []
   }
 }
@@ -58,18 +58,18 @@ output "ecs_cluster_arn" {
 }
 
 output "ecs_cluster_name" {
-  value = "${var.company_name}-cluster"
+  value = "${var.company}-cluster"
 }
 
 output "ecs_service_name" {
-  value = "${var.company_name}-fargate-service"
+  value = "${var.company}-fargate-service"
 }
 
 output "ecs_task_definition_name" {
-    value = "${var.company_name}-fargate-task"
+    value = "${var.company}-fargate-task"
 }
 
 output "ecs_task_container_name" {
-    value = "${var.company_name}-container"
+    value = "${var.company}-container"
 }
 

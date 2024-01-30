@@ -11,14 +11,29 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "company_name" {
+variable "company" {
   type        = string
   description = "Company name to tag on resources and for naming resources"
   default     = null
 }
 
-variable "environment_name" {
+variable "environment" {
   type        = string
   description = "Environment name to tag on resources and for naming resources"
   default     = null
+}
+
+//Networking
+variable "vpc_cidr" {
+  description = "The CIDR block of the vpc"
+}
+
+variable "public_subnets_cidr" {
+  type        = list
+  description = "The CIDR block for the public subnet"
+}
+
+variable "private_subnets_cidr" {
+  type        = list
+  description = "The CIDR block for the private subnet"
 }
