@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
     image = "nginx:latest"
     portMappings = [{
       containerPort = 3000
-      hostPort      = 80
+      hostPort      = 3000
     }]
   }])
 }

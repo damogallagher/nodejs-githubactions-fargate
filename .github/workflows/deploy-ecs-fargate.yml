@@ -68,10 +68,6 @@ jobs:
              echo "ECS Task Definition Name - $ECS_TASK_DEFINITION_NAME" 
              echo "ECS Task Container Name - $ECS_TASK_CONTAINER_NAME" 
 
-      - name: Download task definition
-        run: |
-             aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query taskDefinition > ${{ env.ECS_TASK_DEFINITION_FILE }}
-
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
@@ -84,6 +80,11 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Download task definition
+        run: |
+               aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query taskDefinition > ${{ env.ECS_TASK_DEFINITION_FILE }}
+  
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
