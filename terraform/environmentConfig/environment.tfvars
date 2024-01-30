@@ -1,6 +1,6 @@
 aws_region     = "eu-west-1"
 aws_account_id = "201532394678"
-environment    = "production"
+environment    = "prod"
 company        = "blue-widgets"
 /* module networking */
 vpc_cidr             = "10.0.0.0/16"
