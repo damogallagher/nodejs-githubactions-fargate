@@ -65,7 +65,7 @@ resource "aws_ecs_service" "fargate_service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.fargate_target_group.arn
     container_name   = local.container_name
-    container_port   = 80
+    container_port   = 3000
   }
 }
 
