@@ -3,7 +3,7 @@ resource "aws_lb" "fargate_alb" {
   name               = "${var.company}-fargate-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
+  security_groups    = [aws_security_group.fargate_alb_sg.id]
   subnets            = aws_subnet.private_subnet[*].id
 }
 
