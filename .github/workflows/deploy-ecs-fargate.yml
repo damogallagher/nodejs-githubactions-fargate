@@ -32,8 +32,8 @@ jobs:
       - name: Initialize Terraform
         run: terraform -chdir="./terraform" init --backend-config=environmentConfig/backend-provider-config.conf -reconfigure -upgrade
 
-      - name: Destroy Terraform changes
-        run: terraform -chdir="./terraform" destroy -var-file="environmentConfig/environment.tfvars" -auto-approve      
+       #- name: Destroy Terraform changes
+       #  run: terraform -chdir="./terraform" destroy -var-file="environmentConfig/environment.tfvars" -auto-approve      
 
       - name: Validate Terraform configuration
         run: terraform -chdir="./terraform" validate
