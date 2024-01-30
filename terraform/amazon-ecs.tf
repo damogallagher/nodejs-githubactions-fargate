@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
 }
 
 resource "aws_iam_role" "ecs_execution_role" {
-  name = "ecs_execution_role"
+  name = "ecs_fargate_execution_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
