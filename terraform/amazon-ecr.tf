@@ -1,6 +1,6 @@
 
 resource "aws_ecr_repository" "ecr_repository" {
-  name = "${var.company}-repository"  # Replace with your desired repository name
+  name = "${var.company}-repository" # Replace with your desired repository name
 
   image_scanning_configuration {
     scan_on_push = true
