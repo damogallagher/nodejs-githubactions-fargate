@@ -3,6 +3,11 @@ resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
+
+  tags = {
+    Name = "${var.company}-vpc"
+  }
+
 }
 
 locals {
@@ -33,6 +38,9 @@ resource "aws_subnet" "public_subnet" {
   cidr_block              = element(var.public_subnets_cidr, count.index)
   availability_zone       = element(local.availability_zones, count.index)
   map_public_ip_on_launch = true
+  tags = {
+    Name = "${var.company}-public-subnet"
+  }
 }
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {
@@ -41,6 +49,9 @@ resource "aws_subnet" "private_subnet" {
   cidr_block              = element(var.private_subnets_cidr, count.index)
   availability_zone       = element(local.availability_zones, count.index)
   map_public_ip_on_launch = false
+  tags = {
+    Name = "${var.company}-private-subnet"
+  }
 }
 /* Routing table for private subnet */
 resource "aws_route_table" "private" {
