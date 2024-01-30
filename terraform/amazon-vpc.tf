@@ -98,12 +98,14 @@ resource "aws_vpc_endpoint" "s3" {
 
 /*==== VPC Interface Endpoint - ECR DKR ====*/
 resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id       = aws_vpc.vpc.id
-  service_name = "com.amazonaws.${var.aws_region}.ecr.dkr"
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
+  vpc_endpoint_type = "Interface"
 }
 
 /*==== VPC Interface Endpoint - ECR API ====*/
 resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id       = aws_vpc.vpc.id
-  service_name = "com.amazonaws.${var.aws_region}.ecr.api"
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
+  vpc_endpoint_type = "Interface"
 }

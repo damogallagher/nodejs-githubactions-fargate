@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
 
   container_definitions = jsonencode([{
     name  = local.container_name
-    image = "nginx:latest"
+    image = var.fargate_docker_image
 
     portMappings = [{
       containerPort = 3000
