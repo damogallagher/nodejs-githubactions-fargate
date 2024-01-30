@@ -27,7 +27,7 @@ resource "aws_lb_target_group" "fargate_target_group" {
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc.id
-  target_type = "alb"
+  target_type = "ip"
 }
 
 # Attach the ALB target group to the ALB listener
