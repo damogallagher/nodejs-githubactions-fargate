@@ -38,8 +38,3 @@ variable "private_subnets_cidr" {
   description = "The CIDR block for the private subnet"
 }
 
-variable "fargate_docker_image" {
-  type        = string
-  description = "Docker image to deploy to Fargate"
-  default     = null
-}

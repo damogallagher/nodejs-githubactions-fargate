@@ -42,7 +42,7 @@ jobs:
         run: terraform -chdir="./terraform"  plan -var-file="environmentConfig/environment.tfvars"
 
       - name: Apply Terraform changes for all resources
-        run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars" -var="fargate_docker_image=${{ steps.build-image.outputs.image }}" -auto-approve      
+        run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars"  -auto-approve      
   
       - name: Login to Amazon ECR
         id: login-ecr
