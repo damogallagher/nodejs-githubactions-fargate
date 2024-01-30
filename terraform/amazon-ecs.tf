@@ -1,3 +1,9 @@
+
+locals {
+  container_name = "${var.company}-container"
+}
+
+
 resource "aws_ecs_cluster" "fargate_cluster" {
   name = "${var.company}-cluster"
 
@@ -17,7 +23,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
   execution_role_arn = aws_iam_role.ecs_execution_role.arn
 
   container_definitions = jsonencode([{
-    name  = "${var.company}-container"
+    name  = local.container_name
     image = "nginx:latest"
     portMappings = [{
       containerPort = 3000
@@ -47,10 +53,17 @@ resource "aws_ecs_service" "fargate_service" {
   task_definition = aws_ecs_task_definition.fargate_task.arn
   launch_type     = "FARGATE"
   desired_count   = 2
+  
   network_configuration {
     subnets         = aws_subnet.private_subnet[*].id
-    security_groups = []
+    security_groups = [aws_security_group.fargate_alb_sg.id]
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.fargate_target_group.arn
+    container_name   = local.container_name
+    container_port   = 80
+  }  
 }
 
 output "ecs_cluster_arn" {
@@ -70,6 +83,6 @@ output "ecs_task_definition_name" {
 }
 
 output "ecs_task_container_name" {
-  value = "${var.company}-container"
+  value = local.container_name
 }
 
