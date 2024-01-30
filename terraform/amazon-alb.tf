@@ -12,7 +12,7 @@ resource "aws_security_group" "fargate_alb_sg" {
   name        = "${var.environment}-alb-security-group"
   description = "Security group for ALB"
   vpc_id      = aws_vpc.vpc.id
-  
+
   ingress {
     from_port   = 80
     to_port     = 80
@@ -23,10 +23,11 @@ resource "aws_security_group" "fargate_alb_sg" {
 
 # Create an ALB target group
 resource "aws_lb_target_group" "fargate_target_group" {
-  name     = "${var.environment}-fargate-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.vpc.id
+  name        = "${var.environment}-fargate-tg"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
+  target_type = "alb"
 }
 
 # Attach the ALB target group to the ALB listener
