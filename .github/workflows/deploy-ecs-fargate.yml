@@ -32,8 +32,8 @@ jobs:
       - name: Initialize Terraform
         run: terraform -chdir="./terraform" init --backend-config=environmentConfig/backend-provider-config.conf -reconfigure -upgrade
 
-      - name: Destroy Terraform changes
-        run: terraform -chdir="./terraform" destroy -var-file="environmentConfig/environment.tfvars" -auto-approve      
+      #- name: Destroy Terraform changes
+      #  run: terraform -chdir="./terraform" destroy -var-file="environmentConfig/environment.tfvars" -auto-approve      
 
       - name: Validate Terraform configuration
         run: terraform -chdir="./terraform" validate
@@ -50,9 +50,7 @@ jobs:
 
       - name: Extract Terraform Variables
         run: | 
-             echo "ECR_REPOSITORY_ARN=$(terraform -chdir="./terraform" output -raw ecr_repository_arn)" >> $GITHUB_ENV
              echo "ECR_REPOSITORY_NAME=$(terraform -chdir="./terraform" output -raw ecr_repository_name)" >> $GITHUB_ENV
-             echo "ECS_CLUSTER_ARN=$(terraform -chdir="./terraform" output -raw ecs_cluster_arn)" >> $GITHUB_ENV
              echo "ECS_CLUSTER_NAME=$(terraform -chdir="./terraform" output -raw ecs_cluster_name)" >> $GITHUB_ENV
              echo "ECS_SERVICE_NAME=$(terraform -chdir="./terraform" output -raw ecs_service_name)" >> $GITHUB_ENV   
              echo "ECS_TASK_DEFINITION_NAME=$(terraform -chdir="./terraform" output -raw ecs_task_definition_name)" >> $GITHUB_ENV          
@@ -60,9 +58,7 @@ jobs:
              
       - name: Display Terraform Variables
         run: | 
-             echo "ECR Repository ARN - $ECR_REPOSITORY_ARN"
              echo "ECR Repository Name - $ECR_REPOSITORY_NAME"
-             echo "ECS Cluster ARN - $ECS_CLUSTER_ARN"
              echo "ECS Cluster Name - $ECS_CLUSTER_NAME"
              echo "ECS Service Name - $ECS_SERVICE_NAME"                         
              echo "ECS Task Definition Name - $ECS_TASK_DEFINITION_NAME" 

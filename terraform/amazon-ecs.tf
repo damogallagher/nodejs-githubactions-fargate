@@ -80,9 +80,6 @@ resource "aws_ecs_service" "fargate_service" {
   }
 }
 
-output "ecs_cluster_arn" {
-  value = aws_ecs_cluster.fargate_cluster.arn
-}
 
 output "ecs_cluster_name" {
   value = local.cluster_name

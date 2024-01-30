@@ -101,6 +101,8 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
   vpc_endpoint_type = "Interface"
+
+  security_group_ids = [aws_security_group.interface_endpoints.id]
 }
 
 /*==== VPC Interface Endpoint - ECR API ====*/
@@ -108,4 +110,27 @@ resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
   vpc_endpoint_type = "Interface"
+
+  security_group_ids = [aws_security_group.interface_endpoints.id]
+}
+
+/*==== VPC's Default Security Group ======*/
+resource "aws_security_group" "interface_endpoints" {
+  name        = "${var.environment}-interface-endpoints-sg"
+  description = "Default security group for VPC Interace endpoints"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
+  ingress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    self      = true
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    self      = "true"
+  }
 }
