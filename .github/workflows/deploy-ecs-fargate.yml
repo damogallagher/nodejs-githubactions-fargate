@@ -41,9 +41,9 @@ jobs:
       - name: Plan Terraform changes
         run: terraform -chdir="./terraform"  plan -var-file="environmentConfig/environment.tfvars"
 
-      - name: Apply Terraform changes for Amazon ECR only
-        run: terraform -chdir="./terraform" apply -target=aws_ecr_repository.ecr_repository -var-file="environmentConfig/environment.tfvars" -auto-approve      
-
+      - name: Apply Terraform changes for all resources
+        run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars" -var="fargate_docker_image=${{ steps.build-image.outputs.image }}" -auto-approve      
+  
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -77,9 +77,6 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Apply Terraform changes for all resources
-        run: terraform -chdir="./terraform" apply -var-file="environmentConfig/environment.tfvars" -var="fargate_docker_image=${{ steps.build-image.outputs.image }}" -auto-approve      
-  
       - name: Download task definition
         run: |
                aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --query taskDefinition > ${{ env.ECS_TASK_DEFINITION_FILE }}
