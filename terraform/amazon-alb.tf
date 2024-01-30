@@ -1,6 +1,6 @@
 # Create an Application Load Balancer
 resource "aws_lb" "fargate_alb" {
-  name               = "${var.company}-fargate-alb"
+  name               = "${var.environment}-fargate-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.fargate_alb_sg.id]
@@ -9,7 +9,7 @@ resource "aws_lb" "fargate_alb" {
 
 # Create a security group for the ALB
 resource "aws_security_group" "fargate_alb_sg" {
-  name        = "${var.company}-alb-security-group"
+  name        = "${var.environment}-alb-security-group"
   description = "Security group for ALB"
 
   ingress {
@@ -22,7 +22,7 @@ resource "aws_security_group" "fargate_alb_sg" {
 
 # Create an ALB target group
 resource "aws_lb_target_group" "fargate_target_group" {
-  name     = "${var.company}-fargate-tg"
+  name     = "${var.environment}-fargate-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.vpc.id

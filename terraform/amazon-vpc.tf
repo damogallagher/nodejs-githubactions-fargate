@@ -5,7 +5,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_support   = true
 
   tags = {
-    Name = "${var.company}-vpc"
+    Name = "${var.environment}-vpc"
   }
 
 }
@@ -39,7 +39,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = element(local.availability_zones, count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "${var.company}-public-subnet"
+    Name = "${var.environment}-public-subnet"
   }
 }
 /* Private subnet */
@@ -50,7 +50,7 @@ resource "aws_subnet" "private_subnet" {
   availability_zone       = element(local.availability_zones, count.index)
   map_public_ip_on_launch = false
   tags = {
-    Name = "${var.company}-private-subnet"
+    Name = "${var.environment}-private-subnet"
   }
 }
 /* Routing table for private subnet */
