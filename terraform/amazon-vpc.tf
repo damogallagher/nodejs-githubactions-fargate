@@ -115,6 +115,25 @@ resource "aws_vpc_endpoint" "ecr_api" {
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
 }
+/*==== VPC Interface Endpoint - Logs ====*/
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.logs"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [aws_security_group.interface_endpoints.id]
+  subnet_ids         = aws_subnet.private_subnet[*].id
+}
+/*==== VPC Interface Endpoint - SSM ====*/
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.ssm"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [aws_security_group.interface_endpoints.id]
+  subnet_ids         = aws_subnet.private_subnet[*].id
+}
+
 
 /*==== VPC's Default Security Group ======*/
 resource "aws_security_group" "interface_endpoints" {
