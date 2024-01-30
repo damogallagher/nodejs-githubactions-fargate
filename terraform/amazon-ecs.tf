@@ -41,6 +41,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
         retries     = 3   # Number of retries before considering the container unhealthy
         start_period = 60  # Time period in seconds to ignore the health check results after task startup
       }
+      
 
   }])
 }
