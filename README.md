@@ -6,3 +6,6 @@ arn:aws:iam::201532394678:user/damiengallagher
 Account id: 201532394678
 Username: damiengallagher
 Password: usual
+
+Commit
+terraform fmt --recursive && git status && git commit -am "Update" && git push && git status
