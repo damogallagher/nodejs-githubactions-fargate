@@ -25,15 +25,18 @@ resource "aws_internet_gateway" "ig" {
   }
 }
 # Create NAT Gateway for private subnets
-resource "aws_nat_gateway" "nat_gateway_1" {
-  count     = length(var.private_subnets_cidr)
-  subnet_id = element(aws_subnet.private_subnet.*.id, count.index)
+resource "aws_nat_gateway" "nat_gateway" {
+  allocation_id = aws_eip.eip.id
+  count         = length(var.private_subnets_cidr)
+  subnet_id     = element(aws_subnet.private_subnet.*.id, count.index)
 
   tags = {
     Name = "${var.environment}-nqw"
   }
 }
-
+resource "aws_eip" "eip" {
+  domain = "vpc"
+}
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
