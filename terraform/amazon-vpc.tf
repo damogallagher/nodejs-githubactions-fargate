@@ -19,8 +19,20 @@ locals {
 /* Internet gateway for the public subnet */
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
-}
 
+  tags = {
+    Name = "${var.environment}-igw"
+  }
+}
+# Create NAT Gateway for private subnets
+resource "aws_nat_gateway" "nat_gateway_1" {
+  count     = length(var.private_subnets_cidr)
+  subnet_id = element(aws_subnet.private_subnet.*.id, count.index)
+
+  tags = {
+    Name = "${var.environment}-nqw"
+  }
+}
 
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
@@ -90,53 +102,63 @@ resource "aws_security_group" "default" {
   }
 }
 
-/*==== VPC Gateway Endpoint - S3 ====*/
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = aws_vpc.vpc.id
-  service_name = "com.amazonaws.${var.aws_region}.s3"
+# Create NAT Gateway for private subnets
+resource "aws_nat_gateway" "nat_gateway" {
+  subnet_id = aws_subnet.private_subnet_1.id
+
+  tags = {
+    Name = "nat-gateway-1"
+  }
 }
 
+
+/*==== VPC Gateway Endpoint - S3 ====*/
+/*resource "aws_vpc_endpoint" "s3" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.${var.aws_region}.s3"
+}*/
+
 /*==== VPC Interface Endpoint - ECR DKR ====*/
-resource "aws_vpc_endpoint" "ecr_dkr" {
+/*resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}
+}*/
 
 /*==== VPC Interface Endpoint - ECR API ====*/
-resource "aws_vpc_endpoint" "ecr_api" {
+/*resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}
+}*/
 /*==== VPC Interface Endpoint - Logs ====*/
-resource "aws_vpc_endpoint" "logs" {
+/*resource "aws_vpc_endpoint" "logs" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.logs"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}
+}*/
 /*==== VPC Interface Endpoint - SSM ====*/
-resource "aws_vpc_endpoint" "ssm" {
+/*resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ssm"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}
+}*/
 
 
 /*==== VPC's Default Security Group ======*/
-resource "aws_security_group" "interface_endpoints" {
+/*resource "aws_security_group" "interface_endpoints" {
   name        = "${var.environment}-interface-endpoints-sg"
   description = "Default security group for VPC Interace endpoints"
   vpc_id      = aws_vpc.vpc.id
@@ -154,4 +176,4 @@ resource "aws_security_group" "interface_endpoints" {
     protocol  = "-1"
     self      = "true"
   }
-}
+}*/
