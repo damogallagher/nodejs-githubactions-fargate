@@ -35,13 +35,16 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
 
-resource "aws_route" "private_nat_gateway" {
-  route_table_id         = aws_route_table.private.id
+resource "aws_route" "private_nat_gateway_1" {
+  route_table_id         = aws_route_table.private_1.id
   destination_cidr_block = "0.0.0.0/0"
-  count                  = length(aws_nat_gateway.nat_gateway)
-  gateway_id             = element(aws_nat_gateway.nat_gateway.*.id, count.index)
+  gateway_id             = aws_nat_gateway.nat_gateway[0].id
 }
-
+resource "aws_route" "private_nat_gateway_2" {
+  route_table_id         = aws_route_table.private_2.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_nat_gateway.nat_gateway[1].id
+}
 resource "aws_eip" "eip" {
   domain = "vpc"
   count  = length(var.private_subnets_cidr)
@@ -69,11 +72,17 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 /* Routing table for private subnet */
-resource "aws_route_table" "private" {
+resource "aws_route_table" "private_1" {
+  vpc_id = aws_vpc.vpc.id
+}
+resource "aws_route_table" "private_2" {
   vpc_id = aws_vpc.vpc.id
 }
 /* Routing table for public subnet */
-resource "aws_route_table" "public" {
+resource "aws_route_table" "public_1" {
+  vpc_id = aws_vpc.vpc.id
+}
+resource "aws_route_table" "public_2" {
   vpc_id = aws_vpc.vpc.id
 }
 resource "aws_route" "public_internet_gateway" {
@@ -85,16 +94,23 @@ resource "aws_route" "public_internet_gateway" {
 
 
 /* Route table associations */
-resource "aws_route_table_association" "public" {
-  count          = length(var.public_subnets_cidr)
-  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
-  route_table_id = aws_route_table.public.id
+resource "aws_route_table_association" "public_1" {
+  subnet_id      = aws_subnet.public_subnet[0].id
+  route_table_id = aws_route_table.public_1.id
 }
-resource "aws_route_table_association" "private" {
-  count          = length(var.private_subnets_cidr)
-  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
-  route_table_id = aws_route_table.private.id
+resource "aws_route_table_association" "public_2" {
+  subnet_id      = aws_subnet.public_subnet[1].id
+  route_table_id = aws_route_table.public_2.id
 }
+resource "aws_route_table_association" "private_1" {
+  subnet_id      = aws_subnet.private_subnet[0].id
+  route_table_id = aws_route_table.private_subnet_1.id
+}
+resource "aws_route_table_association" "private_2" {
+  subnet_id      = aws_subnet.private_subnet[1].id
+  route_table_id = aws_route_table.private_subnet_2.id
+}
+
 /*==== VPC's Default Security Group ======*/
 resource "aws_security_group" "default" {
   name        = "${var.environment}-default-sg"
