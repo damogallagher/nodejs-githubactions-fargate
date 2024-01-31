@@ -1,6 +1,5 @@
 provider "aws" {
   region = "eu-west-1"
-  profile = "damiensandbox-ergo"
 
   default_tags {
     tags = {
