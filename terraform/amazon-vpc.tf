@@ -102,14 +102,6 @@ resource "aws_security_group" "default" {
   }
 }
 
-# Create NAT Gateway for private subnets
-resource "aws_nat_gateway" "nat_gateway" {
-  subnet_id = aws_subnet.private_subnet_1.id
-
-  tags = {
-    Name = "nat-gateway-1"
-  }
-}
 
 
 /*==== VPC Gateway Endpoint - S3 ====*/
