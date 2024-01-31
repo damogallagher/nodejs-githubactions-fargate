@@ -98,6 +98,8 @@ resource "aws_security_group" "default" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.vpc.id
   service_name = "com.amazonaws.${var.aws_region}.s3"
+
+  private_dns_enabled = true
 }
 
 /*==== VPC Interface Endpoint - ECR DKR ====*/
@@ -108,6 +110,8 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
+
+  private_dns_enabled = true
 }
 
 /*==== VPC Interface Endpoint - ECR API ====*/
@@ -118,6 +122,8 @@ resource "aws_vpc_endpoint" "ecr_api" {
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
+
+  private_dns_enabled = true
 }
 /*==== VPC Interface Endpoint - Logs ====*/
 resource "aws_vpc_endpoint" "logs" {
@@ -127,6 +133,8 @@ resource "aws_vpc_endpoint" "logs" {
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
+
+  private_dns_enabled = true
 }
 /*==== VPC Interface Endpoint - SSM ====*/
 resource "aws_vpc_endpoint" "ssm" {
@@ -136,6 +144,8 @@ resource "aws_vpc_endpoint" "ssm" {
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
+
+  private_dns_enabled = true
 }
 
 
