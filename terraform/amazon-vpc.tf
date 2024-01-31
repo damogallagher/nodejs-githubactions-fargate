@@ -21,34 +21,11 @@ resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.environment}-igw"
-  }
-}
-# Create NAT Gateway for private subnets
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.eip[count.index].id
-  count         = length(var.private_subnets_cidr)
-  subnet_id     = element(aws_subnet.private_subnet.*.id, count.index)
-
-  tags = {
-    Name = "${var.environment}-nqw"
+    Name = "${var.environment}--igw"
   }
 }
 
-resource "aws_route" "private_nat_gateway_1" {
-  route_table_id         = aws_route_table.private_1.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_nat_gateway.nat_gateway[0].id
-}
-resource "aws_route" "private_nat_gateway_2" {
-  route_table_id         = aws_route_table.private_2.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_nat_gateway.nat_gateway[1].id
-}
-resource "aws_eip" "eip" {
-  domain = "vpc"
-  count  = length(var.private_subnets_cidr)
-}
+
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
@@ -72,49 +49,30 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 /* Routing table for private subnet */
-resource "aws_route_table" "private_1" {
-  vpc_id = aws_vpc.vpc.id
-}
-resource "aws_route_table" "private_2" {
+resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
 }
 /* Routing table for public subnet */
-resource "aws_route_table" "public_1" {
+resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
 }
-resource "aws_route_table" "public_2" {
-  vpc_id = aws_vpc.vpc.id
-}
-resource "aws_route" "public_internet_gateway_1" {
-  route_table_id         = aws_route_table.public_1.id
+resource "aws_route" "public_internet_gateway" {
+  route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.ig.id
 }
-resource "aws_route" "public_internet_gateway_2" {
-  route_table_id         = aws_route_table.public_2.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.ig.id
-}
-
 
 /* Route table associations */
-resource "aws_route_table_association" "public_1" {
-  subnet_id      = aws_subnet.public_subnet[0].id
-  route_table_id = aws_route_table.public_1.id
+resource "aws_route_table_association" "public" {
+  count          = length(var.public_subnets_cidr)
+  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
+  route_table_id = aws_route_table.public.id
 }
-resource "aws_route_table_association" "public_2" {
-  subnet_id      = aws_subnet.public_subnet[1].id
-  route_table_id = aws_route_table.public_2.id
+resource "aws_route_table_association" "private" {
+  count          = length(var.private_subnets_cidr)
+  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
+  route_table_id = aws_route_table.private.id
 }
-resource "aws_route_table_association" "private_1" {
-  subnet_id      = aws_subnet.private_subnet[0].id
-  route_table_id = aws_route_table.private_1.id
-}
-resource "aws_route_table_association" "private_2" {
-  subnet_id      = aws_subnet.private_subnet[1].id
-  route_table_id = aws_route_table.private_2.id
-}
-
 /*==== VPC's Default Security Group ======*/
 resource "aws_security_group" "default" {
   name        = "${var.environment}-default-sg"
@@ -136,55 +94,53 @@ resource "aws_security_group" "default" {
   }
 }
 
-
-
 /*==== VPC Gateway Endpoint - S3 ====*/
-/*resource "aws_vpc_endpoint" "s3" {
+resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.vpc.id
   service_name = "com.amazonaws.${var.aws_region}.s3"
-}*/
+}
 
 /*==== VPC Interface Endpoint - ECR DKR ====*/
-/*resource "aws_vpc_endpoint" "ecr_dkr" {
+resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}*/
+}
 
 /*==== VPC Interface Endpoint - ECR API ====*/
-/*resource "aws_vpc_endpoint" "ecr_api" {
+resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}*/
+}
 /*==== VPC Interface Endpoint - Logs ====*/
-/*resource "aws_vpc_endpoint" "logs" {
+resource "aws_vpc_endpoint" "logs" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.logs"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}*/
+}
 /*==== VPC Interface Endpoint - SSM ====*/
-/*resource "aws_vpc_endpoint" "ssm" {
+resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ssm"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [aws_security_group.interface_endpoints.id]
   subnet_ids         = aws_subnet.private_subnet[*].id
-}*/
+}
 
 
 /*==== VPC's Default Security Group ======*/
-/*resource "aws_security_group" "interface_endpoints" {
+resource "aws_security_group" "interface_endpoints" {
   name        = "${var.environment}-interface-endpoints-sg"
   description = "Default security group for VPC Interace endpoints"
   vpc_id      = aws_vpc.vpc.id
@@ -202,4 +158,4 @@ resource "aws_security_group" "default" {
     protocol  = "-1"
     self      = "true"
   }
-}*/
+}
