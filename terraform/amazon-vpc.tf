@@ -26,7 +26,7 @@ resource "aws_internet_gateway" "ig" {
 }
 # Create NAT Gateway for private subnets
 resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.eip.id
+  allocation_id = aws_eip.eip[count.index].id
   count         = length(var.private_subnets_cidr)
   subnet_id     = element(aws_subnet.private_subnet.*.id, count.index)
 
@@ -36,6 +36,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 }
 resource "aws_eip" "eip" {
   domain = "vpc"
+  count  = length(var.private_subnets_cidr)
 }
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
