@@ -34,6 +34,14 @@ resource "aws_nat_gateway" "nat_gateway" {
     Name = "${var.environment}-nqw"
   }
 }
+
+resource "aws_route" "private_nat_gateway" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  count                  = length(aws_nat_gateway.nat_gateway)
+  gateway_id             = element(aws_nat_gateway.nat_gateway.*.id, count.index)
+}
+
 resource "aws_eip" "eip" {
   domain = "vpc"
   count  = length(var.private_subnets_cidr)
@@ -74,11 +82,7 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id             = aws_internet_gateway.ig.id
 }
 
-resource "aws_route" "private_nat_gateway" {
-  route_table_id         = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_nat_gateway.nat_gateway.id
-}
+
 
 /* Route table associations */
 resource "aws_route_table_association" "public" {
