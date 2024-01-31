@@ -98,8 +98,6 @@ resource "aws_security_group" "default" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.vpc.id
   service_name = "com.amazonaws.${var.aws_region}.s3"
-
-  private_dns_enabled = true
 }
 
 /*==== VPC Interface Endpoint - ECR DKR ====*/
