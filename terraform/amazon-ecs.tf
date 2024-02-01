@@ -57,19 +57,22 @@ resource "aws_iam_role" "ecs_execution_role" {
       Principal = {
         Service = "ecs-tasks.amazonaws.com"
       }
-      },
+      }
     ]
   })
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action   = ["ecr:GetAuthorizationToken*"]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
+  inline_policy {
+    name = "ecs_execution_role_inline_policy"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action   = ["ecr:GetAuthorizationToken*"]
+          Effect   = "Allow"
+          Resource = "*"
+        },
+      ]
+    })
+  }
 }
 
 resource "aws_ecs_service" "fargate_service" {
