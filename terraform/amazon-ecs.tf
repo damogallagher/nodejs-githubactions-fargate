@@ -57,12 +57,12 @@ resource "aws_iam_role" "ecs_execution_role" {
       Principal = {
         Service = "ecs-tasks.amazonaws.com"
       }
-    },
-    {
-          Action   = ["ecr:GetAuthorizationToken*"]
-          Effect   = "Allow"
-          Resource = "*"
-        },]
+      },
+      {
+        Action   = ["ecr:GetAuthorizationToken*"]
+        Effect   = "Allow"
+        Resource = "*"
+    }, ]
   })
 }
 
