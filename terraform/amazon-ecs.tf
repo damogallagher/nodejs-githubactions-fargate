@@ -70,7 +70,7 @@ resource "aws_ecs_service" "fargate_service" {
 
   network_configuration {
     subnets         = aws_subnet.private_subnet[*].id
-    security_groups = [aws_security_group.fargate_alb_sg.id]
+    security_groups = [aws_security_group.fargate_alb_sg.id, aws_security_group.interface_endpoints.id]
   }
 
   load_balancer {
