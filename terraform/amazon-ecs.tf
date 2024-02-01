@@ -58,11 +58,17 @@ resource "aws_iam_role" "ecs_execution_role" {
         Service = "ecs-tasks.amazonaws.com"
       }
       },
+    ]
+  })
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
         Action   = ["ecr:GetAuthorizationToken*"]
         Effect   = "Allow"
         Resource = "*"
-    }, ]
+      },
+    ]
   })
 }
 
