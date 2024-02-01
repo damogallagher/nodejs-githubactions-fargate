@@ -66,7 +66,14 @@ resource "aws_iam_role" "ecs_execution_role" {
       Version = "2012-10-17"
       Statement = [
         {
-          Action   = ["ecr:GetAuthorizationToken*"]
+          Action = [
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:BatchGetImage",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ]
           Effect   = "Allow"
           Resource = "*"
         },
